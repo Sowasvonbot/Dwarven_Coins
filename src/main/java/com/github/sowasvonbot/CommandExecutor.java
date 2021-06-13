@@ -13,7 +13,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
 
         switch (command.getName()) {
             case "test":
-                Updater.deletePlugin();
+                Updater.checkForUpdate();
             default:
                 ((Player) sender).chat(String.format("You typed %s", command.getName()));
         }
