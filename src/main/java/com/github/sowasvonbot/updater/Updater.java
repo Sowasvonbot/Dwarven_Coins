@@ -13,6 +13,16 @@ public class Updater {
                 "Plugin version is up to date");
 
 
-        Main.getMainLogger().info(System.getProperty("user.dir") + File.separator + "plugins");
+        File pluginFolder = new File(System.getProperty("user.dir") + File.separator + "plugins");
+        if (!pluginFolder.isDirectory()) {
+            Main.getMainLogger().warning("wrong plugin folder. Not updating");
+            return;
+        }
+        File[] files = pluginFolder.listFiles();
+
+        for (File file : files) {
+            Main.getMainLogger().info(file.getName());
+        }
+
     }
 }

@@ -1,7 +1,8 @@
 package com.github.sowasvonbot.updater;
 
+import com.github.sowasvonbot.Main;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
@@ -9,10 +10,30 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class GitHubApiGrabber {
 
-    protected static JsonElement getNewestReleaseElementFromGithub() {
+    private static GitHubApiGrabber instance;
+    private JsonArray gitReleases;
+    private final String repoUrl =
+            "https://api.github.com/repos/sowasvonbot/Dwarven_Coins/releases";
+    private final List<VersionName> versionNameList = new ArrayList<>();
+
+    private VersionName firstRelease;
+
+
+    public static GitHubApiGrabber getInstance() {
+        return Objects.isNull(instance) ? instance = new GitHubApiGrabber() : instance;
+    }
+
+    protected JsonArray getGitReleases() {
+        return gitReleases;
+    }
+
+    protected void getReleasesFromGithub() {
         String content = "nothing";
 
         try {
@@ -27,25 +48,37 @@ public class GitHubApiGrabber {
                 builder.append(reader.readLine()).append("\n");
             }
 
-            JsonElement jsonObject = new JsonParser().parse(builder.toString());
-            if (jsonObject.isJsonArray())
-                jsonObject = jsonObject.getAsJsonArray().get(0);
-            return jsonObject;
+            gitReleases = new JsonParser().parse(builder.toString()).getAsJsonArray();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new VersionNotFoundException();
+        }
+    }
+
+    private void findFirstRelease() {
+        if (Objects.isNull(gitReleases))
+            throw new GitVersionException("Error retrieving release from Github");
+
+        for (JsonElement element : gitReleases) {
+            String versionName = element.getAsJsonObject().get("name").getAsString();
+
+            try {
+                versionNameList.add(VersionName.fromString(versionName));
+            } catch (IllegalArgumentException e) {
+                Main.getMainLogger().warning(e.getMessage());
+            }
         }
 
-        throw new VersionNotFoundException();
+        versionNameList.sort(VersionName::compareTo);
+        firstRelease = versionNameList.get(0);
+
     }
 
-    private static String getReleaseNameFromJSONElement(JsonElement releaseElement) {
-        JsonObject jsonObject = releaseElement.getAsJsonObject();
-
-        //Removing the v at the start of the version name
-        return jsonObject.get("name").getAsString().substring(1);
-    }
-
-    protected static String getVersionNameOnGithub() {
-        return getReleaseNameFromJSONElement(getNewestReleaseElementFromGithub());
+    protected String getVersionNameOnGithub() {
+        if (Objects.isNull(firstRelease)) {
+            getReleasesFromGithub();
+            findFirstRelease();
+        }
+        return firstRelease.toString();
     }
 }

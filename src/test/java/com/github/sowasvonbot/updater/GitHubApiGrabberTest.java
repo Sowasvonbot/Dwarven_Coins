@@ -1,6 +1,5 @@
 package com.github.sowasvonbot.updater;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.junit.jupiter.api.Test;
 
@@ -9,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class GitHubApiGrabberTest {
 
     @Test public void testGetReleasesFromGithub() {
-        JsonElement jsonElement = GitHubApiGrabber.getNewestReleaseElementFromGithub();
-
-        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        GitHubApiGrabber.getInstance().getReleasesFromGithub();
+        JsonObject jsonObject =
+                GitHubApiGrabber.getInstance().getGitReleases().get(0).getAsJsonObject();
         assertTrue(jsonObject.has("name"));
     }
 
