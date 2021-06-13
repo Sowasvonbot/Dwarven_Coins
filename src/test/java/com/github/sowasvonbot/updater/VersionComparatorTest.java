@@ -11,8 +11,8 @@ class VersionComparatorTest {
 
     @Test public void testLocalFileOutput() {
         try {
-            String test = VersionComparator.getLocalVersion();
-            assertEquals("0.0.1", test);
+            String test = VersionComparator.getLocalVersion().toString();
+            assertEquals("v0.0.1", test);
         } catch (IOException e) {
             e.printStackTrace();
         }

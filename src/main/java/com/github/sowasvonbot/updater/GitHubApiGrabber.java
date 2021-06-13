@@ -70,15 +70,15 @@ public class GitHubApiGrabber {
         }
 
         versionNameList.sort(VersionName::compareTo);
-        firstRelease = versionNameList.get(0);
+        firstRelease = versionNameList.get(versionNameList.size() - 1);
 
     }
 
-    protected String getVersionNameOnGithub() {
+    protected VersionName getVersionNameOnGithub() {
         if (Objects.isNull(firstRelease)) {
             getReleasesFromGithub();
             findFirstRelease();
         }
-        return firstRelease.toString();
+        return firstRelease;
     }
 }

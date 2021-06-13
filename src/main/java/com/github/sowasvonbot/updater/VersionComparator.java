@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 
 public class VersionComparator {
 
-    protected static String getLocalVersion() throws IOException {
+    protected static VersionName getLocalVersion() throws IOException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 VersionComparator.class.getClassLoader().getResourceAsStream("plugin.yml")));
@@ -21,7 +21,7 @@ public class VersionComparator {
                 line = line.replace(" ", "");
                 line = line.replace("version:", "");
                 reader.close();
-                return line;
+                return VersionName.fromString(line);
             }
         }
         throw new VersionNotFoundException();

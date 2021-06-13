@@ -7,18 +7,6 @@ import java.util.List;
 public record VersionName(int first_digit, int second_digit, int third_digit)
         implements Comparable<VersionName> {
 
-    public int getFirst_digit() {
-        return first_digit;
-    }
-
-    public int getSecond_digit() {
-        return second_digit;
-    }
-
-    public int getThird_digit() {
-        return third_digit;
-    }
-
     public static VersionName fromString(String toParse) {
         toParse = toParse.replace(" ", "");
         toParse = toParse.replace("v", "");
@@ -43,5 +31,13 @@ public record VersionName(int first_digit, int second_digit, int third_digit)
 
     @Override public String toString() {
         return String.format("v%d.%d.%d", first_digit, second_digit, third_digit);
+    }
+
+    @Override public boolean equals(Object obj) {
+        if (!(obj instanceof VersionName))
+            return false;
+        VersionName versionName = (VersionName) obj;
+        return first_digit == versionName.first_digit() && second_digit == versionName
+                .second_digit() && third_digit == versionName.third_digit();
     }
 }
