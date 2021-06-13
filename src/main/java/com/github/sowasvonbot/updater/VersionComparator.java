@@ -1,5 +1,7 @@
 package com.github.sowasvonbot.updater;
 
+import org.bukkit.Bukkit;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,5 +25,15 @@ public class VersionComparator {
             }
         }
         throw new VersionNotFoundException();
+    }
+
+    public static boolean newVersionAvailable() {
+        try {
+            return !getLocalVersion().equals(GitHubApiGrabber.getVersionNameOnGithub());
+        } catch (IOException e) {
+            Bukkit.getLogger()
+                    .warning("Error retrieving version from GitHub, auto update not available");
+            return false;
+        }
     }
 }

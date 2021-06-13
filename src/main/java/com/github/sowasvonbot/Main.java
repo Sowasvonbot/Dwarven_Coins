@@ -1,6 +1,9 @@
 package com.github.sowasvonbot;
 
+import com.github.sowasvonbot.updater.Updater;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
 
@@ -13,6 +16,7 @@ public class Main extends JavaPlugin {
     @Override public void onEnable() {
         instance = this;
         getLogger().info("onEnable is called!");
+        Updater.checkForUpdate();
         getServer().addRecipe(Coin.getRecipe());
         CommandExecutor commandExecutor = new CommandExecutor();
         this.getCommand("test").setExecutor(commandExecutor);
@@ -22,5 +26,9 @@ public class Main extends JavaPlugin {
     @Override public void onDisable() {
         getLogger().info("onDisable is called!");
         getServer().removeRecipe(Coin.getRecipe().getKey());
+    }
+
+    public static Logger getMainLogger() {
+        return instance.getLogger();
     }
 }
