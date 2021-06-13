@@ -37,9 +37,7 @@ public class GitHubApiGrabber {
         String content = "nothing";
 
         try {
-            URLConnection connection =
-                    new URL("https://api.github.com/repos/sowasvonbot/Dwarven_Coins/releases")
-                            .openConnection();
+            URLConnection connection = new URL(repoUrl).openConnection();
             BufferedReader reader =
                     new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder builder = new StringBuilder();
