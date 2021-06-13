@@ -1,5 +1,6 @@
 package com.github.sowasvonbot;
 
+import com.github.sowasvonbot.updater.VersionComparator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
@@ -17,8 +18,13 @@ public class Main extends JavaPlugin {
         getLogger().info("onEnable is called!");
         getServer().addRecipe(Coin.getRecipe());
         CommandExecutor commandExecutor = new CommandExecutor();
-        this.getCommand("test").setExecutor(commandExecutor);
+        this.getCommand("update").setExecutor(commandExecutor);
+        this.getCommand("force_update").setExecutor(commandExecutor);
         getServer().getPluginManager().registerEvents(new BasicPlayerListener(), this);
+
+        Main.getMainLogger().info(VersionComparator.newVersionAvailable() ?
+                "New version available" :
+                "Plugin version is up to date");
     }
 
     @Override public void onDisable() {

@@ -29,8 +29,8 @@ public class VersionComparator {
 
     public static boolean newVersionAvailable() {
         try {
-            return !getLocalVersion()
-                    .equals(GitHubApiGrabber.getInstance().getLatestReleaseNameOnGithub());
+            return getLocalVersion()
+                    .compareTo(GitHubApiGrabber.getInstance().getLatestReleaseNameOnGithub()) < 0;
         } catch (IOException e) {
             Bukkit.getLogger()
                     .warning("Error retrieving version from GitHub, auto update not available");

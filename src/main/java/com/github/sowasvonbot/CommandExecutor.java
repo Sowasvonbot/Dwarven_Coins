@@ -12,8 +12,12 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
             return false;
 
         switch (command.getName()) {
-            case "test":
-                Updater.checkForUpdate();
+            case "update":
+                Updater.checkForUpdate(false);
+                break;
+            case "force_update":
+                Updater.checkForUpdate(true);
+                break;
             default:
                 ((Player) sender).chat(String.format("You typed %s", command.getName()));
         }

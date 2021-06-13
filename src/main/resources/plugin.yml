@@ -4,7 +4,11 @@ api-version: 1.16
 main: com.github.sowasvonbot.Main
 
 commands:
-  test:
-    description: Test the plugin
+  update:
+    description: update the plugin
     usage: /<command>
-    permission: TestPlugin.test
+    permission: DwarcenCoin.update
+  force_update:
+    description: Force update the plugin
+    usage: /<command>
+    permission: DwarvenCoin.force_update

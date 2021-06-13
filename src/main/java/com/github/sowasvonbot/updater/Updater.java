@@ -15,11 +15,20 @@ public class Updater {
     private static final File pluginFolder =
             new File(System.getProperty("user.dir") + File.separator + "plugins");
 
-    public static void checkForUpdate() {
-
+    public static void printUpdateMessage() {
         Main.getMainLogger().info(VersionComparator.newVersionAvailable() ?
                 "New version available" :
                 "Plugin version is up to date");
+    }
+
+    public static void checkForUpdate(boolean force) {
+
+        printUpdateMessage();
+
+        if (!VersionComparator.newVersionAvailable() && !force)
+            return;
+
+        Main.getMainLogger().info(force ? "force updating" : "updating");
 
         deletePlugin();
         try {
