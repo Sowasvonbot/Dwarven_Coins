@@ -22,6 +22,6 @@ public class VersionComparator {
                 return line;
             }
         }
-        return "test";
+        throw new VersionNotFoundException();
     }
 }
