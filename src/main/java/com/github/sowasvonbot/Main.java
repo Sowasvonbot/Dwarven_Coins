@@ -1,5 +1,6 @@
 package com.github.sowasvonbot;
 
+import com.github.sowasvonbot.updater.CommandExecutor;
 import com.github.sowasvonbot.updater.VersionComparator;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,9 +18,9 @@ public class Main extends JavaPlugin {
         instance = this;
         getLogger().info("onEnable is called!");
         getServer().addRecipe(Coin.getRecipe());
-        CommandExecutor commandExecutor = new CommandExecutor();
-        this.getCommand("update").setExecutor(commandExecutor);
-        this.getCommand("force_update").setExecutor(commandExecutor);
+
+        new CommandExecutor().registerCommands();
+
         getServer().getPluginManager().registerEvents(new BasicPlayerListener(), this);
 
         Main.getMainLogger().info(VersionComparator.newVersionAvailable() ?

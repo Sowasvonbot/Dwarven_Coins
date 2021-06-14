@@ -15,31 +15,39 @@ public class Updater {
     private static final File pluginFolder =
             new File(System.getProperty("user.dir") + File.separator + "plugins");
 
-    public static void printUpdateMessage() {
-        Main.getMainLogger().info(VersionComparator.newVersionAvailable() ?
+    public static void printUpdateMessage(MessageTarget target) {
+        target.sendMessage(VersionComparator.newVersionAvailable() ?
                 "New version available" :
                 "Plugin version is up to date");
     }
 
-    public static void checkForUpdate(boolean force) {
+    public static void checkForUpdate(MessageTarget target, boolean force) {
 
-        printUpdateMessage();
-
-        if (!VersionComparator.newVersionAvailable() && !force)
-            return;
-
-        Main.getMainLogger().info(force ? "force updating" : "updating");
-
-        deletePlugin();
+        printUpdateMessage(target);
         try {
-            downloadPlugin();
-        } catch (IOException e) {
+            if (!VersionComparator.newVersionAvailable() && !force)
+                return;
+
+            target.sendMessage(force ? "force updating" : "updating");
+
+            target.sendMessage("Deleting old target");
+            deletePlugin();
+
+
+            downloadPlugin(target);
+        } catch (Exception e) {
+            target.sendMessage(e.getMessage());
+            target.sendMessage("See server logs for details");
+            Main.getMainLogger()
+                    .warning(String.format("Error updating the plugin: %s!", e.getMessage()));
+            Main.getMainLogger().warning("Please update manually");
             e.printStackTrace();
         }
 
     }
 
-    private static void downloadPlugin() throws IOException {
+    private static void downloadPlugin(MessageTarget target) throws IOException {
+        target.sendMessage("Start downloading new Plugin");
         ReadableByteChannel readableByteChannel = Channels.newChannel(
                 GitHubApiGrabber.getInstance().getLatestReleaseDownloadURL().openStream());
 
@@ -51,7 +59,9 @@ public class Updater {
         fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 
         fileOutputStream.close();
+        target.sendMessage("Finished download of new Plugin");
 
+        target.sendMessage("Reloading");
         Bukkit.getServer().reload();
     }
 
