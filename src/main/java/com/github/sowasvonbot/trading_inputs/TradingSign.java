@@ -12,13 +12,22 @@ public class TradingSign {
     private Player player;
     private String tradeLine;
 
-    public TradingSign(Block sign, Player player) {
+    public TradingSign(Block sign, Player player, String tradeLine) {
         this.sign = sign;
         this.player = player;
+        this.tradeLine = tradeLine;
     }
 
     public TradingSign() {
         sign = null;
+    }
+
+    public Block getSign() {
+        return sign;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public String getTradeLine() {
@@ -35,7 +44,7 @@ public class TradingSign {
         String tradeLine = getTradeLine(lines);
         if (tradeLine.equals(Constants.errorTradingLineNotFound))
             return new TradingSign();
-        return new TradingSign(sign, player);
+        return new TradingSign(sign, player, tradeLine);
     }
 
     private static String getTradeLine(List<String> lines) {

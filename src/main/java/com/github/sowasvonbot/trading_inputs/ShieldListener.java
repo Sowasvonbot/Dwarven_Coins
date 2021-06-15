@@ -47,6 +47,8 @@ public class ShieldListener implements Listener {
             return;
         }
 
+        NetworkStorage.registerTradingBlock(tradingBlock, tradingSign);
+
 
     }
 

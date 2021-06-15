@@ -1,5 +1,6 @@
 package com.github.sowasvonbot.trading_inputs;
 
+import com.github.sowasvonbot.Main;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -18,19 +19,31 @@ public class TradingBlock {
         this.player = player;
 
         switch (tradingLine) {
-            case Constants.tradePrefix:
+            case Constants.tradePrefix -> {
                 player.sendMessage("Found trading prefix");
                 tradingMode = TradingMode.TRADE;
-                break;
-            case Constants.coinStorePrefix:
+            }
+            case Constants.coinStorePrefix -> {
                 player.sendMessage("Found coin store prefix");
                 tradingMode = TradingMode.COINS;
-                break;
-            case Constants.inputPrefix:
+            }
+            case Constants.inputPrefix -> {
                 player.sendMessage("Found input prefix");
                 tradingMode = TradingMode.INPUT;
-                break;
+            }
         }
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Block getBlock() {
+        return block;
+    }
+
+    public TradingMode getTradingMode() {
+        return tradingMode;
     }
 
     private TradingBlock() {
@@ -55,5 +68,10 @@ public class TradingBlock {
         TRADE, INPUT, COINS
     }
 
-
+    @Override public boolean equals(Object obj) {
+        Main.getMainLogger().info("Equals is called");
+        if (!(obj instanceof TradingBlock tradingBlock))
+            return false;
+        return tradingBlock.getBlock().equals(block);
+    }
 }
