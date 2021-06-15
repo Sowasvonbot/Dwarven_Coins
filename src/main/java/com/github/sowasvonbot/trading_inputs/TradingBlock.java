@@ -34,6 +34,10 @@ public class TradingBlock {
         }
     }
 
+    @Override public int hashCode() {
+        return Objects.hash(block);
+    }
+
     public Player getPlayer() {
         return player;
     }

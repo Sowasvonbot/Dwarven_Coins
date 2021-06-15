@@ -1,11 +1,10 @@
 package com.github.sowasvonbot;
 
-import com.github.sowasvonbot.coin.CoinListener;
 import com.github.sowasvonbot.coin.Coin;
+import com.github.sowasvonbot.coin.CoinListener;
+import com.github.sowasvonbot.trading_inputs.InventoryListener;
 import com.github.sowasvonbot.trading_inputs.ShieldListener;
 import com.github.sowasvonbot.updater.CommandExecutor;
-import com.github.sowasvonbot.updater.VersionComparator;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
@@ -28,6 +27,7 @@ public class Main extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new CoinListener(), this);
         getServer().getPluginManager().registerEvents(new ShieldListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         //Main.getMainLogger().info(VersionComparator.newVersionAvailable() ?
         //       "New version available" :
         //        "Plugin version is up to date");

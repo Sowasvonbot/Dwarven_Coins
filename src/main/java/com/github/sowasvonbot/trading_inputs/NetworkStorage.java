@@ -2,6 +2,7 @@ package com.github.sowasvonbot.trading_inputs;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import org.bukkit.block.Block;
 
 import java.util.Objects;
 
@@ -21,6 +22,11 @@ public class NetworkStorage {
             storage.put(tradingSign, tradingBlock);
         }
 
+    }
+
+    public boolean containsBlock(Block block) {
+        return storage.values().stream()
+                .anyMatch(tradingBlock -> tradingBlock.getBlock().equals(block));
     }
 
     private static NetworkStorage instance;
