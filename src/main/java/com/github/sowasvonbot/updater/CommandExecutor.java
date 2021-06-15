@@ -1,8 +1,6 @@
 package com.github.sowasvonbot.updater;
 
 import com.github.sowasvonbot.Main;
-import com.github.sowasvonbot.updater.Updater;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
