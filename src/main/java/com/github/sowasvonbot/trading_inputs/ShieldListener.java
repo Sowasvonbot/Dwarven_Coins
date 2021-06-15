@@ -33,14 +33,14 @@ public class ShieldListener implements Listener {
         if (!(sign.getState().getBlockData() instanceof WallSign signState))
             return;
 
+        TradingSign tradingSign = TradingSign.fromSignBlock(sign, player, lines);
 
-        String tradingLine = getTradeLine(lines);
-        if (tradingLine.equals(Constants.errorTradingLineNotFound))
+        if (!tradingSign.isValidTradingSign())
             return;
 
         TradingBlock tradingBlock = TradingBlock
                 .fromBlock(sign.getRelative(signState.getFacing().getOppositeFace()), player,
-                        tradingLine);
+                        tradingSign.getTradeLine());
 
         if (!tradingBlock.isTradingBlock()) {
             sign.breakNaturally();
@@ -48,14 +48,6 @@ public class ShieldListener implements Listener {
         }
 
 
-    }
-
-    private String getTradeLine(List<String> lines) {
-        for (String line : lines) {
-            if (Constants.tradingPrefixes.contains(line.toLowerCase()))
-                return line;
-        }
-        return Constants.errorTradingLineNotFound;
     }
 
     private List<BlockState> getSurroundingBlocks(@Nonnull Block block) {
