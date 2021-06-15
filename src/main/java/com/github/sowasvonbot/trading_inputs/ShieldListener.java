@@ -1,11 +1,10 @@
 package com.github.sowasvonbot.trading_inputs;
 
 import com.github.sowasvonbot.Main;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.WallSign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -19,7 +18,7 @@ import java.util.List;
 public class ShieldListener implements Listener {
 
     @EventHandler public void changeSignEvent(SignChangeEvent event) {
-        handleTradeSign(event.getBlock(), Arrays.asList(event.getLines()));
+        handleTradeSign(event.getBlock(), event.getPlayer(), Arrays.asList(event.getLines()));
     }
 
     @EventHandler public void onBlockBreak(BlockBreakEvent event) {
@@ -30,16 +29,33 @@ public class ShieldListener implements Listener {
                 .forEach(block -> Main.getMainLogger().info(block.getType().name()));
     }
 
-    private void handleTradeSign(Block sign, List<String> lines) {
-        if (sign.getState() instanceof Sign)
-            Main.getMainLogger().info("A sign");
-        if (!getSurroundingBlocks(sign).stream()
-                .anyMatch(blockState -> blockState instanceof Chest))
+    private void handleTradeSign(Block sign, Player player, List<String> lines) {
+        if (!(sign.getState().getBlockData() instanceof WallSign signState))
             return;
-        if (!lines.contains("trade"))
+
+
+        String tradingLine = getTradeLine(lines);
+        if (tradingLine.equals(Constants.errorTradingLineNotFound))
             return;
-        Main.getMainLogger().info(String
-                .format("Trade sign at x:%d, y:%d, z:%d", sign.getX(), sign.getY(), sign.getZ()));
+
+        TradingBlock tradingBlock = TradingBlock
+                .fromBlock(sign.getRelative(signState.getFacing().getOppositeFace()), player,
+                        tradingLine);
+
+        if (!tradingBlock.isTradingBlock()) {
+            sign.breakNaturally();
+            return;
+        }
+
+
+    }
+
+    private String getTradeLine(List<String> lines) {
+        for (String line : lines) {
+            if (Constants.tradingPrefixes.contains(line.toLowerCase()))
+                return line;
+        }
+        return Constants.errorTradingLineNotFound;
     }
 
     private List<BlockState> getSurroundingBlocks(@Nonnull Block block) {
