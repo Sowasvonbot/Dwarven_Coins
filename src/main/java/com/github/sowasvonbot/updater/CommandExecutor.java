@@ -22,7 +22,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
         else
             target = MessageTarget.fromPlugin(Main.getInstance());
 
-        Boolean force = false;
+        boolean force = false;
         switch (command.getName()) {
             case "force_update":
                 force = true;

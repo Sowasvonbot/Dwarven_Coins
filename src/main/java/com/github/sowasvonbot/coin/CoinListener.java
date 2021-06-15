@@ -52,9 +52,9 @@ public class CoinListener implements Listener {
         if (event.getCursor().getType() != Material.PLAYER_HEAD)
             return;
 
-        Boolean isCoin = Coin.isCoin(event.getCursor());
-        Boolean isArmor = event.getSlotType() == InventoryType.SlotType.ARMOR;
-        Boolean isCrafting = !isArmor && event.getSlotType() == InventoryType.SlotType.CRAFTING;
+        boolean isCoin = Coin.isCoin(event.getCursor());
+        boolean isArmor = event.getSlotType() == InventoryType.SlotType.ARMOR;
+        boolean isCrafting = !isArmor && event.getSlotType() == InventoryType.SlotType.CRAFTING;
 
         event.setCancelled((isCoin && isArmor) || (!isCoin && isCrafting));
     }
