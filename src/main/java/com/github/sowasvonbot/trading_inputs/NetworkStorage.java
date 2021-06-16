@@ -1,10 +1,13 @@
 package com.github.sowasvonbot.trading_inputs;
 
+import com.github.sowasvonbot.trading_inputs.trading_blocks.Dummy;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class NetworkStorage {
 
@@ -27,6 +30,12 @@ public class NetworkStorage {
     public boolean containsBlock(Block block) {
         return storage.values().stream()
                 .anyMatch(tradingBlock -> tradingBlock.getBlock().equals(block));
+    }
+
+    public TradingBlock getBlock(Player player, Block block) {
+        Optional<TradingBlock> optionalTradingBlock = storage.values().stream()
+                .filter(tradingBlock -> tradingBlock.getBlock().equals(block)).findFirst();
+        return optionalTradingBlock.orElseGet(Dummy::new);
     }
 
     private static NetworkStorage instance;

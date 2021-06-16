@@ -1,8 +1,6 @@
 package com.github.sowasvonbot.coin;
 
-import com.github.sowasvonbot.Main;
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.*;
@@ -16,10 +14,8 @@ import java.util.UUID;
 public class Coin {
 
 
-
-    public static ItemStack createItemStack() {
-        ItemStack coin = new ItemStack(Material.PLAYER_HEAD, 1);
-        coin.setAmount(1);
+    public static ItemStack createItemStack(int amount) {
+        ItemStack coin = new ItemStack(Material.PLAYER_HEAD, amount);
         SkullMeta skullMeta = (SkullMeta) coin.getItemMeta();
 
         skullMeta.getPersistentDataContainer()
@@ -39,6 +35,10 @@ public class Coin {
         skullMeta.setDisplayName("Coin");
         coin.setItemMeta(skullMeta);
         return coin;
+    }
+
+    public static ItemStack createItemStack() {
+        return createItemStack(1);
     }
 
     public static boolean isCoin(ItemStack itemStack) {
