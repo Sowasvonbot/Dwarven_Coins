@@ -1,5 +1,6 @@
 package com.github.sowasvonbot.trading_inputs;
 
+import com.github.sowasvonbot.Main;
 import com.github.sowasvonbot.trading_inputs.trading_blocks.Dummy;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -18,8 +19,7 @@ public class NetworkStorage {
     }
 
     private void storeTradingBlock(TradingBlock tradingBlock, TradingSign tradingSign) {
-        if (storage.values().stream()
-                .anyMatch(tradingBlock1 -> tradingBlock1.equals(tradingBlock))) {
+        if (storage.containsValue(tradingBlock)) {
             tradingSign.getSign().breakNaturally();
         } else {
             storage.put(tradingSign, tradingBlock);
@@ -30,6 +30,15 @@ public class NetworkStorage {
     public boolean containsBlock(Block block) {
         return storage.values().stream()
                 .anyMatch(tradingBlock -> tradingBlock.getBlock().equals(block));
+    }
+
+    public void destroySign(Player player, Block sign) {
+        TradingSign tradingSign = new TradingSign(sign, player, "");
+
+        if (storage.containsKey(tradingSign)) {
+            TradingBlock tradingBlock = storage.remove(tradingSign);
+            Main.getMainLogger().info("Removed trading block: " + tradingBlock.block.getLocation());
+        }
     }
 
     public TradingBlock getBlock(Player player, Block block) {

@@ -54,4 +54,14 @@ public class TradingSign {
         }
         return Constants.errorTradingLineNotFound;
     }
+
+    @Override public int hashCode() {
+        return player.hashCode();
+    }
+
+    @Override public boolean equals(Object obj) {
+        if (!(obj instanceof TradingSign sign))
+            return false;
+        return sign.getSign().equals(this.sign);
+    }
 }
