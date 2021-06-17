@@ -1,6 +1,7 @@
 package com.github.sowasvonbot.trading_inputs;
 
 import com.github.sowasvonbot.Main;
+import com.github.sowasvonbot.coin.Coin;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
@@ -8,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 
 import java.util.Arrays;
@@ -42,5 +44,18 @@ public class InventoryListener implements Listener {
 
         tradingBlock.handleTrade();
 
+    }
+
+    @EventHandler public void onOpen(InventoryOpenEvent event) {
+        if (!(event.getInventory().getHolder() instanceof Container chest))
+            return;
+        if (!(event.getPlayer() instanceof Player player))
+            return;
+        TradingBlock tradingBlock = NetworkStorage.getInstance().getBlock(player, chest.getBlock());
+
+        if (!tradingBlock.isTradingBlock())
+            return;
+
+        event.getInventory().setItem(10, Coin.createItemStack());
     }
 }

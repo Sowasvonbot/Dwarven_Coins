@@ -2,6 +2,7 @@ package com.github.sowasvonbot.trading_inputs.trading_blocks;
 
 import com.github.sowasvonbot.Main;
 import com.github.sowasvonbot.coin.Coin;
+import com.github.sowasvonbot.trading_inputs.NetworkStorage;
 import com.github.sowasvonbot.trading_inputs.Trade;
 import com.github.sowasvonbot.trading_inputs.TradingBlock;
 import org.bukkit.Bukkit;
@@ -42,10 +43,12 @@ public class Trader extends TradingBlock {
 
             for (ItemStack itemStack : myInventory.getContents()) {
 
-
                 if (Objects.nonNull(itemStack) && Coin.isCoin(itemStack)) {
                     while (itemStack.getAmount() >= trade.coinAmount()) {
                         itemStack.setAmount(itemStack.getAmount() - trade.coinAmount());
+
+                        NetworkStorage.sendPlayerCoins(Coin.createItemStack(trade.coinAmount()),
+                                getPlayer());
                         myInventory
                                 .addItem(new ItemStack(trade.material(), trade.materialAmount()));
 

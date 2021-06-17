@@ -1,11 +1,13 @@
 package com.github.sowasvonbot.trading_inputs;
 
 import com.github.sowasvonbot.Main;
+import com.github.sowasvonbot.trading_inputs.trading_blocks.CoinStorage;
 import com.github.sowasvonbot.trading_inputs.trading_blocks.Dummy;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -55,5 +57,14 @@ public class NetworkStorage {
 
     public static void registerTradingBlock(TradingBlock tradingBlock, TradingSign tradingSign) {
         getInstance().storeTradingBlock(tradingBlock, tradingSign);
+    }
+
+    public static void sendPlayerCoins(ItemStack coins, Player player) {
+        Optional<CoinStorage> coinStorage = getInstance().storage.values().stream()
+                .filter(tradingBlock -> tradingBlock.getPlayer().equals(player))
+                .filter(tradingBlock -> tradingBlock instanceof CoinStorage)
+                .map(tradingBlock -> (CoinStorage) tradingBlock).findFirst();
+
+        coinStorage.ifPresent(value -> value.myInventory.addItem(coins));
     }
 }
