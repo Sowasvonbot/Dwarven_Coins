@@ -1,5 +1,6 @@
 package com.github.sowasvonbot.trading_inputs;
 
+import com.github.sowasvonbot.trading_inputs.trading_blocks.Trader;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
@@ -42,6 +43,18 @@ public class ShieldListener implements Listener {
             return;
         }
 
+        if ((tradingBlock instanceof Trader trader)) {
+            try {
+                Trade trade = Trade.fromStringList(lines);
+                trader.setTrade(trade);
+                player.sendMessage(trade.toString());
+
+            } catch (Trade.TradeParseException e) {
+                player.sendMessage(e.getMessage());
+                sign.breakNaturally();
+                return;
+            }
+        }
         NetworkStorage.registerTradingBlock(tradingBlock, tradingSign);
 
 

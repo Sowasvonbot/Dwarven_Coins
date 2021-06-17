@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
+import java.util.Objects;
+
 public abstract class TradingBlock {
 
     protected Block block;
@@ -22,7 +24,8 @@ public abstract class TradingBlock {
         this.block = block;
         this.player = player;
 
-        if (block.getState() instanceof InventoryHolder inventoryHolder) {
+
+        if (Objects.nonNull(block) && block.getState() instanceof InventoryHolder inventoryHolder) {
             player.sendMessage("Found inventory");
             myInventory = inventoryHolder.getInventory();
         } else
